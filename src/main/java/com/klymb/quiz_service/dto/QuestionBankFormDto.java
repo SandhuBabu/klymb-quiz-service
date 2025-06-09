@@ -1,6 +1,6 @@
 package com.klymb.quiz_service.dto;
 
-import com.klymb.quiz_service.entity.QuestionBankType;
+import com.klymb.quiz_service.entity.enums.QuestionBankType;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;

@@ -1,6 +1,6 @@
 package com.klymb.quiz_service.reposioty;
 
-import com.klymb.quiz_service.entity.TenantKey;
+import com.klymb.quiz_service.entity.enums.TenantKey;
 import com.klymb.quiz_service.entity.TenantKeyValue;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;

@@ -1,10 +1,11 @@
 package com.klymb.quiz_service.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.klymb.quiz_service.entity.enums.DifficultyLevel;
+import com.klymb.quiz_service.entity.enums.QuestionType;
 import jakarta.persistence.*;
 import lombok.*;
 
-import java.time.LocalDateTime;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -22,6 +23,8 @@ public class Question {
     private String id;
 
     private String question;
+
+    private int questionNo;
 
     @Enumerated(EnumType.STRING)
     private DifficultyLevel difficultyLevel;

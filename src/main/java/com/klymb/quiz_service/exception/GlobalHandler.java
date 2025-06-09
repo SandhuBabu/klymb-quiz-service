@@ -115,4 +115,10 @@ public class GlobalHandler {
         var errors = Map.of("file", ex.getMessage());
         return new ResponseEntity<>(errors, HttpStatus.BAD_REQUEST);
     }
+
+    @ExceptionHandler(QuestionBankException.class)
+    public ResponseEntity<Map<String, String>> handleQuestionBankException(QuestionBankException ex) {
+        var errors = Map.of("error", ex.getMessage());
+        return new ResponseEntity<>(errors, ex.getStatus());
+    }
 }

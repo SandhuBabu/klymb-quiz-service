@@ -1,5 +1,6 @@
 package com.klymb.quiz_service.entity;
 
+import com.klymb.quiz_service.entity.enums.TenantKey;
 import jakarta.persistence.*;
 import lombok.*;
 

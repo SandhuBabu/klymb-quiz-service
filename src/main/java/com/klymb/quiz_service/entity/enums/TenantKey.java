@@ -1,4 +1,4 @@
-package com.klymb.quiz_service.entity;
+package com.klymb.quiz_service.entity.enums;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

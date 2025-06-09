@@ -1,5 +1,7 @@
 package com.klymb.quiz_service.entity;
 
+import com.klymb.quiz_service.entity.enums.QuestionBankStatus;
+import com.klymb.quiz_service.entity.enums.QuestionBankType;
 import com.klymb.quiz_service.utils.SecurityUtils;
 import jakarta.persistence.*;
 import lombok.*;
@@ -28,6 +30,9 @@ public class QuestionBank {
     @Enumerated(EnumType.STRING)
     private QuestionBankType type;
 
+    @Enumerated(EnumType.STRING)
+    private QuestionBankStatus status;
+
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
 
@@ -38,7 +43,8 @@ public class QuestionBank {
     @ManyToOne
     private TenantKeyValue category;
 
-    @OneToMany(fetch = FetchType.LAZY, mappedBy = "questionBank")
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "questionBank", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OrderBy("questionNo ASC")
     private Set<Question> questions;
 
     @PrePersist
@@ -51,6 +57,7 @@ public class QuestionBank {
         this.createdBy = currentUser;
         this.updatedBy = currentUser;
         this.tenantId = SecurityUtils.getCurrentUserTenantId();
+        this.status = QuestionBankStatus.ACTIVE;
     }
 
     @PreUpdate
@@ -62,4 +69,9 @@ public class QuestionBank {
     public String getTypeText() {
         return type.getText();
     }
+
+    public String getStatusText() {
+        return status.getText();
+    }
+
 }

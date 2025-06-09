@@ -1,8 +1,8 @@
 package com.klymb.quiz_service.utils;
 
-import com.klymb.quiz_service.entity.DifficultyLevel;
+import com.klymb.quiz_service.entity.enums.DifficultyLevel;
 import com.klymb.quiz_service.entity.Question;
-import com.klymb.quiz_service.entity.QuestionType;
+import com.klymb.quiz_service.entity.enums.QuestionType;
 import com.klymb.quiz_service.exception.FileFormatException;
 
 import java.util.Arrays;
@@ -72,6 +72,7 @@ public class Utils {
                 .mark(mark)
                 .options(optionsSet)
                 .correctOptions(correctOptionsSet)
+                .questionNo(questionNo)
                 .build();
     }
 }
