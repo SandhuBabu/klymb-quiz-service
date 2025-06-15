@@ -6,6 +6,7 @@ import com.klymb.quiz_service.entity.enums.QuestionType;
 import com.klymb.quiz_service.exception.FileFormatException;
 
 import java.util.Arrays;
+import java.util.Random;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -74,5 +75,22 @@ public class Utils {
                 .correctOptions(correctOptionsSet)
                 .questionNo(questionNo)
                 .build();
+    }
+
+    public static String generateRandomCode() {
+        String chars = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+        Random random = new Random();
+        StringBuilder code = new StringBuilder();
+
+        for (int i = 0; i < 11; i++) {
+            if (i == 3 || i == 7) {
+                code.append("-");
+            } else {
+                int index = random.nextInt(chars.length());
+                code.append(chars.charAt(index));
+            }
+        }
+
+        return code.toString();
     }
 }

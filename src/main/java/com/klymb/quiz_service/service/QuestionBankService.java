@@ -3,27 +3,27 @@ package com.klymb.quiz_service.service;
 import com.klymb.quiz_service.dto.QuestionBankFormDto;
 import com.klymb.quiz_service.entity.Question;
 import com.klymb.quiz_service.entity.QuestionBank;
+import com.klymb.quiz_service.entity.enums.QuestionBankStatus;
 import com.klymb.quiz_service.entity.enums.TenantKey;
 import com.klymb.quiz_service.entity.TenantKeyValue;
-import com.klymb.quiz_service.entity.projection.QuestionBankSummary;
+import com.klymb.quiz_service.dto.QuestionBankSummary;
+import com.klymb.quiz_service.entity.specfications.CustomSpecifications;
 import com.klymb.quiz_service.exception.NotFoundException;
 import com.klymb.quiz_service.exception.QuestionBankException;
+import com.klymb.quiz_service.mapper.Mapper;
 import com.klymb.quiz_service.reposioty.QuestionBankRepository;
 import com.klymb.quiz_service.reposioty.QuestionRepository;
 import com.klymb.quiz_service.reposioty.TenantKeyValueRepository;
-import com.klymb.quiz_service.security.UserRole;
 import com.klymb.quiz_service.utils.FileUtils;
 import com.klymb.quiz_service.utils.SecurityUtils;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
-import java.util.EnumSet;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
@@ -81,13 +81,20 @@ public class QuestionBankService {
                 .orElseThrow(() -> new NotFoundException("Question bank not found"));
     }
 
-    public List<QuestionBankSummary> getAllQuestionBank() {
-        return questionBankRepository.findAllSummariesByTenantId(SecurityUtils.getCurrentUserTenantId());
+    public List<QuestionBankSummary> getAllQuestionBank(String title, QuestionBankStatus status, String category) {
+        Specification<QuestionBank> spec = CustomSpecifications.questionBankSpecification(
+                SecurityUtils.getCurrentUserTenantId(),
+                title,
+                status,
+                category
+        );
+        var questionBanks = questionBankRepository.findAll(spec);
+        return questionBanks.stream().map(Mapper::questionBankToSummary)
+                .collect(Collectors.toList());
     }
 
     @Transactional
     public void deleteQuestionBank(String id) {
-        var currentUser = SecurityUtils.getCurrentUserId();
         var currentUserTenant = SecurityUtils.getCurrentUserTenantId();
         var currentUserRoles = SecurityUtils.getCurrentUserRoles();
 
@@ -98,5 +105,14 @@ public class QuestionBankService {
             throw new QuestionBankException("Unauthorized"+currentUserRoles, HttpStatus.FORBIDDEN);
 
         questionBankRepository.deleteById(id);
+    }
+
+    @Transactional
+    public void updateQuestionBankStatus(Map<String, QuestionBankStatus> questionBankStatus, String id) {
+        var currentUserTenantId = SecurityUtils.getCurrentUserTenantId();
+        var questionBank = questionBankRepository.findByIdAndTenantId(id, currentUserTenantId)
+                .orElseThrow(() -> new QuestionBankException("Question bank not found", HttpStatus.NOT_FOUND));
+        questionBank.setStatus(questionBankStatus.get("status"));
+        questionBankRepository.save(questionBank);
     }
 }
