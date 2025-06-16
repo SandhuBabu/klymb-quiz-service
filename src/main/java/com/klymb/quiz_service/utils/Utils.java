@@ -93,4 +93,8 @@ public class Utils {
 
         return code.toString();
     }
+
+    public static String joinCodeWithTenantId(String code, String tenantId) {
+        return String.format("%s::::%s", code, tenantId);
+    }
 }

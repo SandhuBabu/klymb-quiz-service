@@ -121,4 +121,10 @@ public class GlobalHandler {
         var errors = Map.of("error", ex.getMessage());
         return new ResponseEntity<>(errors, ex.getStatus());
     }
+
+    @ExceptionHandler(QuizException.class)
+    public ResponseEntity<Map<String, String>> handleQuizException(QuizException ex) {
+        var errors = Map.of("error", ex.getMessage());
+        return new ResponseEntity<>(errors, ex.getStatus());
+    }
 }

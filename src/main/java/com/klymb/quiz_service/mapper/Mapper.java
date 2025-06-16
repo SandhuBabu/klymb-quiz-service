@@ -1,11 +1,13 @@
 package com.klymb.quiz_service.mapper;
 
-import com.klymb.quiz_service.dto.QuizFormDto;
-import com.klymb.quiz_service.dto.QuizSummary;
+import com.klymb.quiz_service.dto.*;
+import com.klymb.quiz_service.entity.Question;
 import com.klymb.quiz_service.entity.QuestionBank;
-import com.klymb.quiz_service.dto.QuestionBankSummary;
 import com.klymb.quiz_service.entity.Quiz;
 import com.klymb.quiz_service.entity.UserGroup;
+
+import java.util.List;
+import java.util.stream.Collectors;
 
 public class Mapper {
     public static QuestionBankSummary questionBankToSummary(QuestionBank questionBank) {
@@ -56,6 +58,30 @@ public class Mapper {
                 .updatedAt(quiz.getUpdatedAt())
                 .questionBankId(quiz.getQuestionBank().getId())
                 .questionBankTitle(quiz.getQuestionBank().getTitle())
+                .build();
+    }
+
+    public static QuestionForParticipantDto questionToQuestionForParticipant(Question question) {
+        return QuestionForParticipantDto.builder()
+                .id(question.getId())
+                .question(question.getQuestion())
+                .options(question.getOptions())
+                .questionType(question.getQuestionType())
+                .build();
+    }
+
+    public static QuizForParticipantDto quizToQuizForParticipantDto(Quiz quiz, List<Question> questions) {
+        var questionsForParticipant = questions.stream()
+                .map(Mapper::questionToQuestionForParticipant)
+                .collect(Collectors.toSet());
+
+        return QuizForParticipantDto.builder()
+                .id(quiz.getId())
+                .title(quiz.getTitle())
+                .duration(quiz.getDuration())
+                .noOfQuestions(quiz.getNoOfQuestions())
+                .status(quiz.getStatus())
+                .questions(questionsForParticipant)
                 .build();
     }
 }

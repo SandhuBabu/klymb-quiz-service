@@ -30,4 +30,6 @@ public interface QuizRepository extends JpaRepository<Quiz, String> {
             """, nativeQuery = true)
     int updateQuizStatusToLiveOrCompleted();
 
+    Optional<Quiz> findByCode(String code);
+
 }

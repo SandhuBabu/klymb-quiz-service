@@ -12,6 +12,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/api/quiz")
@@ -57,4 +58,8 @@ public class QuizController {
         quizService.deleteQuiz(id);
     }
 
+    @PostMapping("/{code}/join")
+    public Map<String, String> joinQuiz(@PathVariable String code) {
+        return quizService.joinQuiz(code);
+    }
 }

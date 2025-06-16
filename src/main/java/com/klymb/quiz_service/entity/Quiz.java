@@ -77,6 +77,20 @@ public class Quiz {
         return this.code.split("::::")[0];
     }
 
+    public QuizStatus getStatus() {
+        var now = LocalDateTime.now();
+
+        if(now.isAfter(endDateTime))
+            return QuizStatus.COMPLETED;
+
+        if(
+                (now.isEqual(startDateTime) || now.isAfter(startDateTime)) &&
+                (now.isEqual(endDateTime)   || now.isBefore(endDateTime))
+        )
+            return QuizStatus.LIVE;
+        return status;
+    }
+
     public String getStatusText() {
         return status.getText();
     }

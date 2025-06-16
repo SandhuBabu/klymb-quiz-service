@@ -24,6 +24,11 @@ public class SecurityUtils {
         return jwt != null ? jwt.getClaimAsString("userId") : null;
     }
 
+    public static String getCurrentUserEmail() {
+        Jwt jwt = getJwt();
+        return jwt != null ? jwt.getClaimAsString("email") : null;
+    }
+
     public static List<String> getCurrentUserRoles() {
         Jwt jwt = getJwt();
         return jwt != null ? jwt.getClaimAsStringList("roles") : List.of();
