@@ -1,5 +1,6 @@
 package com.klymb.quiz_service.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.klymb.quiz_service.entity.enums.DifficultyLevel;
 import com.klymb.quiz_service.entity.enums.QuestionType;
@@ -48,6 +49,10 @@ public class Question {
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "question_bank_id")
     private QuestionBank questionBank;
+
+    @ManyToOne
+    @JsonIgnore
+    private Attempt attempt;
 
     public String getDifficultyLevelText() {
         return difficultyLevel.getText();
